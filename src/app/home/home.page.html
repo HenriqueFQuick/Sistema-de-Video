@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="primary"> 
+    <ion-title>
+      Sistema de Videos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-searchbar placeholder="Digite o título desejado" #tag (keyup.enter)="buscarTitulo(tag.value)"></ion-searchbar>
+
+<ion-content>
+  <ion-card id="#id_card">
+    <ion-card-header>
+        Adicionar Imagem
+      </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Titulo</ion-label>
+        <ion-input type="text" [(ngModel)]="titulo" placeholder="Digite o título do video"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Link</ion-label>
+        <ion-input type="text" [(ngModel)]="link" placeholder="Digite o link do video"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Description</ion-label>
+        <ion-textarea  [(ngModel)]="descricao" placeholder="Digite a descrição"></ion-textarea>
+      </ion-item>
+      <ion-button (click)="cancel()" shape="round" fill="outline" class="hoverCancel">Cancel</ion-button>
+      <ion-button (click)="excluir()" shape="round" fill="outline" class="hoverCancel">Excluir Tudo</ion-button>
+      <ion-button (click)="submit()" shape="round" fill="solid" type="submit" class="hoverSubmit">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <div id="div1"></div>  
+</ion-content>
