@@ -1,7 +1,8 @@
 import { Component, Query, OnInit } from '@angular/core';
-import { NavController, LoadingController, ModalController, AlertController, IonCard, IonLabel, DomController } from '@ionic/angular';
+import { NavController, LoadingController, ModalController, AlertController, IonCard, IonLabel, DomController, ToastController } from '@ionic/angular';
 import { Empresa } from './Empresa';
 import { stringify } from 'querystring';
+import { Validators,FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -10,15 +11,34 @@ import { stringify } from 'querystring';
 })
 export class HomePage implements OnInit {
 
-  public static count : number = (localStorage.length > 0? localStorage.length : localStorage.length+1);
+  public static count : number = localStorage.length;
   
-  
+  public form : FormGroup;
 
   public titulo : string = "";
   public link : string = "";
   public descricao : string = "";
 
-  constructor(public navCtrl : NavController, private loadingCtrl : LoadingController, public alertCtrl: AlertController, public modalCtrl : ModalController) {
+  constructor(public navCtrl : NavController, private fb : FormBuilder, private loadingCtrl : LoadingController, public alertCtrl: AlertController, public modalCtrl : ModalController, public toastController : ToastController) {
+    this.form = this.fb.group(
+      {
+        Titulo : ['', Validators.compose([
+          Validators.minLength(1),
+          Validators.maxLength(50),
+          Validators.required
+        ])],
+        Link : ['', Validators.compose([
+          Validators.minLength(1),
+          Validators.maxLength(50),
+          Validators.required
+        ])],
+        Descricao : ['', Validators.compose([
+          Validators.minLength(1),
+          Validators.maxLength(250),
+          Validators.required
+        ])],
+      }
+    );
   }
 
   async ngOnInit(){
@@ -49,9 +69,11 @@ cancel() : void{
 }
 
 apagar(){
-  this.titulo = ""
-  this.link = ""
-  this.descricao = ""
+  this.form.setValue({
+    Titulo: " ",
+    Link: " ",
+    Descricao: " "
+  })
 }
 
 async excluir(){
@@ -60,7 +82,7 @@ async excluir(){
     spinner: "bubbles"
   });
   loader.present();
-  
+
     localStorage.clear()
     
   loader.dismiss();
@@ -83,14 +105,10 @@ atualizaFinal(data, id){
   window.location.reload()
 }
 
-validar() : boolean{
-  if(this.descricao=="" || this.link == ""){
-    return false;
-  }else return true;
-}
-
-  async submit() : Promise<void>{
-  if(this.validar()){
+async submit() : Promise<void>{
+    this.titulo = this.form.value.Titulo.toString().trimLeft();
+    this.link = this.form.value.Link.toString().trimLeft();
+    this.descricao = this.form.value.Descricao.toString().trimLeft();
 
     this.link = this.modificaLink(this.link);
     HomePage.count = HomePage.count + 1;
@@ -101,14 +119,7 @@ validar() : boolean{
     this.criaHTML2(obj2.Titulo, obj2.Link, obj2.Descricao, obj2.id);
     
     this.apagar();
-  }else{
-    let prompt = (await this.alertCtrl.create({
-      id: "teste",
-      header: "ERRO",
-      message: "Campos obrigatorios",
-      buttons: ["Close"]
-    })).present();
-  }
+  
 }
 
 modificaLink(link : string) : string{
@@ -116,15 +127,16 @@ modificaLink(link : string) : string{
 }
 
 async buscarTitulo(tag : string){
-
+  var tags :string[] = []
   for(var element in localStorage){
     var obj : Empresa = JSON.parse(localStorage.getItem(element));
     if(obj != null){
       if((obj.Titulo).includes(tag)){
-        console.log(obj.Titulo)
+        tags.push(obj.Titulo)
       }
     }
   }
+  alert(tags.join('\n\n'))
 }
 
 
@@ -166,14 +178,13 @@ criaHTML2(t : string, l : string, d: string, id : string){
   iframe.frameBorder = "0";
   iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
   iframe.allowFullscreen;
-  iframe.width = "560";
-  iframe.height = "315";
+  iframe.style.cssText = 'width:50%;height:100%;margin-left:25%'
   ionCardContent.appendChild(iframe);
 
   var ionItem3 = document.createElement("ion-item");
   ionCardContent.appendChild(ionItem3);
   var label3 = document.createElement("ion-label");
-  label3.style.cssText = 'height:70px;white-space:pre-wrap;overflow-y:scroll'
+  label3.style.cssText = 'height:60%;white-space:pre-wrap;overflow-y:scroll'
   label3.innerHTML = d;
   ionItem3.appendChild(label3);
 
