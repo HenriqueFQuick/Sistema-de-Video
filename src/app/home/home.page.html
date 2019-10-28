@@ -7,25 +7,25 @@
 </ion-header>
 
 <ion-searchbar placeholder="Digite o título desejado" #tag (keyup.enter)="buscarTitulo(tag.value)" style="width: 100%"></ion-searchbar>
-<ion-content padding>
+<ion-content class="ion-padding">
   <form [formGroup]="form">
     <ion-list>
       <ion-item>
-        <ion-label position="floating">Titulo</ion-label>
+        <ion-label position="stacked">Titulo</ion-label>
         <ion-input type="text" formControlName="Titulo" placeholder="Digite o título do video"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Link</ion-label>
+        <ion-label position="stacked">Link</ion-label>
         <ion-input type="text" formControlName="Link" placeholder="Digite o link do video"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Description</ion-label>
+        <ion-label position="stacked">Description</ion-label>
         <ion-textarea formControlName="Descricao" placeholder="Digite a descrição"></ion-textarea>
       </ion-item>
     </ion-list>
-    <ion-button (click)="cancel()" shape="round" fill="outline" class="hoverCancel">Cancel</ion-button>
-    <ion-button (click)="excluir()" shape="round" fill="outline" class="hoverCancel">Excluir Tudo</ion-button>
-    <ion-button (click)="submit()" shape="round" fill="solid" type="submit" class="hoverSubmit" [disabled]="!form.valid">Submit</ion-button>
+    <ion-button size="small" (click)="cancel()" shape="round" fill="outline" class="hoverCancel">Cancel</ion-button>
+    <ion-button size="small" (click)="excluir()" shape="round" fill="outline" class="hoverCancel">Excluir Tudo</ion-button>
+    <ion-button size="small" (click)="submit()" shape="round" fill="solid" type="submit" class="hoverSubmit" [disabled]="!form.valid">Submit</ion-button>
   </form>
 
   <div id="div1"></div>  
